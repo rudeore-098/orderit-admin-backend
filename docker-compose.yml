@@ -1,0 +1,13 @@
+services:
+  spring-backend:
+    build: "./spring-backend"
+    container_name: "spring-backend"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DB=${MYSQL_DB}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - BANK_DEPOSIT_KEY=${BANK_DEPOSIT_KEY}
+    ports:
+      - 80:80
