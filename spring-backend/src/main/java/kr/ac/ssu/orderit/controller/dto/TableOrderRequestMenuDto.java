@@ -3,13 +3,9 @@ package kr.ac.ssu.orderit.controller.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import kr.ac.ssu.orderit.service.dto.TableOrderParamMenuDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@AllArgsConstructor
 public class TableOrderRequestMenuDto {
     @NotNull(message = "menuId is null.")
     private Integer menuId;
