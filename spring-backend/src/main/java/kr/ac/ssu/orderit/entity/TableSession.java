@@ -29,7 +29,7 @@ public class TableSession {
     @Basic
     @Column(name = "deletedAt", nullable = true)
     private Timestamp deletedAt;
-    @OneToMany(mappedBy = "tableSessionByTableSessionId")
-    private Collection<Order> ordersById;
+//    @OneToMany(mappedBy = "tableSessionByTableSessionId")
+//    private Collection<Order> ordersById;
 
 }
