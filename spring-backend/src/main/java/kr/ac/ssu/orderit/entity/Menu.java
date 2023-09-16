@@ -13,6 +13,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
+@Table(name = "menu", schema = "orderit", catalog = "")
 public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
