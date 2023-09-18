@@ -35,4 +35,7 @@ public class BankDeposit {
     @Basic
     @Column(name = "updatedAt", nullable = true)
     private Timestamp updatedAt;
+    @Basic
+    @Column(name = "OrderId", nullable = true)
+    private Integer orderId;
 }

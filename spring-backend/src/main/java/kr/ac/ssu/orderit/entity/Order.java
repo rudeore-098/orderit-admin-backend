@@ -14,7 +14,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
-@Table(name = "order", schema = "orderit", catalog = "")
+@Table(name = "`order`", schema = "orderit", catalog = "")
 public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -29,6 +29,9 @@ public class Order {
     @Basic
     @Column(name = "createdAt", nullable = false)
     private Timestamp createdAt;
+    @Basic
+    @Column(name = "BankDepositIdx", nullable = true)
+    private Integer bankDepositIdx;
     @ManyToOne
     @JoinColumn(name = "TableSessionId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private TableSession tableSessionByTableSessionId;

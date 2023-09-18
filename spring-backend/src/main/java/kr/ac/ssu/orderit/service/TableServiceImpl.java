@@ -111,12 +111,14 @@ public class TableServiceImpl implements TableService{
         }
         BankDeposit bankDeposit = bankDepositOptional.get();
         bankDeposit.setStatus(1);
+        bankDeposit.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         bankDepositRepository.save(bankDeposit);
 
         Order order = Order.builder()
                 .tableSessionId(tableOrderParamDto.getSessionId())
                 .price(totalPrice)
                 .createdAt(new Timestamp(System.currentTimeMillis()))
+                .bankDepositIdx(bankDeposit.getIdx())
                 .build();
         order = orderRepository.save(order);
 
@@ -124,6 +126,9 @@ public class TableServiceImpl implements TableService{
             orderMenu.setOrderId(order.getId());
             orderMenuRepository.save(orderMenu);
         }
+
+        bankDeposit.setOrderId(order.getId());
+        bankDepositRepository.save(bankDeposit);
 
     }
 }
