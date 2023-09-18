@@ -14,6 +14,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Data
+@Table(name = "order", schema = "orderit", catalog = "")
 public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
