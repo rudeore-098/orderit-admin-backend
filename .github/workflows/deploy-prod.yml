@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
 
           script: |
-            cd orderit-backend
+            cd orderit-admin-backend
             git branch -m main
             git pull https://jonghokim27:${{ secrets.GIT_TOKEN }}@github.com/jonghokim27/orderit-backend.git main
             rm -rf .env
