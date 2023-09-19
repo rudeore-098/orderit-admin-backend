@@ -34,6 +34,9 @@ public class Menu {
     @Basic
     @Column(name = "isAvail", nullable = false)
     private Integer isAvail;
+    @Basic
+    @Column(name = "team", nullable = false)
+    private String team;
     @OneToMany(mappedBy = "menuByMenuId")
     private Collection<OrderMenu> orderMenusById;
 }
