@@ -35,7 +35,7 @@ public class SecurityConfig {
     /**
      * DI
      */
-    private final JWTAuthFilter jwtAuthFilter;
+    private final AuthKeyFilter authKeyFilter;
     private final StatusCode statusCode;
 
     /**
@@ -49,14 +49,13 @@ public class SecurityConfig {
         http.cors(Customizer.withDefaults());
         http.sessionManagement(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/table/login", "/bank/deposit", "/error", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
         );
         http.exceptionHandling((exceptionHandling) -> exceptionHandling
                 .authenticationEntryPoint(getUnauthorizedEntryPoint())
                 .accessDeniedHandler(getAccessDeniedHandler())
         );
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 

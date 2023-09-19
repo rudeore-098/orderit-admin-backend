@@ -3,70 +3,45 @@ package kr.ac.ssu.orderit.controller;
 import jakarta.validation.Valid;
 import kr.ac.ssu.orderit.common.CommonResponse;
 import kr.ac.ssu.orderit.common.StatusCode;
-import kr.ac.ssu.orderit.controller.dto.TableLoginRequestDto;
-import kr.ac.ssu.orderit.controller.dto.TableLoginResponseDto;
-import kr.ac.ssu.orderit.controller.dto.TableMenuResponseDto;
-import kr.ac.ssu.orderit.controller.dto.TableOrderRequestDto;
-import kr.ac.ssu.orderit.entity.TableSession;
-import kr.ac.ssu.orderit.exception.BankDepositNotFoundException;
-import kr.ac.ssu.orderit.exception.MenuNotFoundException;
+import kr.ac.ssu.orderit.controller.dto.TableLeaveDto;
 import kr.ac.ssu.orderit.service.TableService;
-import kr.ac.ssu.orderit.service.dto.TableLoginReturnDto;
+import kr.ac.ssu.orderit.vo.TableVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/table")
 @RequiredArgsConstructor
 @Slf4j
 public class TableController {
-    private final TableService tableService;
     private final StatusCode statusCode;
+    private final TableService tableService;
 
-    /**
-     * Table login (01)
-     */
     @NotNull
-    @PostMapping("/login")
+    @PostMapping("")
     @ResponseBody
-    public CommonResponse<TableLoginResponseDto> login(@NotNull @Valid @RequestBody TableLoginRequestDto tableLoginRequestDto){
-        TableLoginReturnDto tableLoginReturnDto = tableService.tableLogin(tableLoginRequestDto.toTableLoginParamDto());
-        return new CommonResponse<>(statusCode.SSU2010, tableLoginReturnDto.toTableLoginResponseDto(), statusCode.SSU2010_MSG);
+    public CommonResponse table(){
+        List<TableVo> tableVos = tableService.getTables();
+        return new CommonResponse(statusCode.SSU2000, tableVos, statusCode.SSU2000_MSG);
     }
 
-    /**
-     * Table menu (02)
-     */
     @NotNull
-    @PostMapping("/menu")
+    @PostMapping("/leave")
     @ResponseBody
-    public CommonResponse<TableMenuResponseDto> menu(){
-        return new CommonResponse<>(statusCode.SSU2020, tableService.tableMenu().toTableMenuResponseDto(), statusCode.SSU2020_MSG);
-    }
-
-    /**
-     * Table order (03)
-     */
-    @NotNull
-    @PostMapping("/order")
-    @ResponseBody
-    public CommonResponse<Object> order(@NotNull @Valid @RequestBody TableOrderRequestDto tableOrderRequestDto){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        TableSession tableSession = (TableSession) authentication.getPrincipal();
-
+    public CommonResponse leave(@RequestBody @Valid TableLeaveDto tableLeaveDto){
         try {
-            tableService.tableOrder(tableOrderRequestDto.toTableOrderParamDto(tableSession.getId()));
-            return new CommonResponse<>(statusCode.SSU2030, null, statusCode.SSU2030_MSG);
-        } catch (MenuNotFoundException e){
-            return new CommonResponse<>(statusCode.SSU4030, null, statusCode.SSU4030_MSG);
-        } catch (BankDepositNotFoundException e){
-            return new CommonResponse<>(statusCode.SSU4031, null, statusCode.SSU4031_MSG);
+            tableService.leave(tableLeaveDto.getTableSessionId());
+            return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
+        } catch (Exception e){
+            return new CommonResponse(statusCode.SSU4000, null, statusCode.SSU4000_MSG);
         }
-
     }
 }

@@ -9,22 +9,15 @@ import java.util.Optional;
 @Component
 public class HTTPRequestUtil {
     /**
-     * Get access token from HTTP Request
+     * Get auth key from HTTP Request
      * @param request HttpServletRequest
-     * @return access token (optional)
+     * @return auth key (optional)
      * @author jonghokim27
      */
     @NotNull
-    public Optional<String> getAccessToken(@NotNull HttpServletRequest request) {
-        final String HEADER_KEY = "Authorization";
-        final String PREFIX = "Bearer ";
+    public Optional<String> getAuthKey(@NotNull HttpServletRequest request) {
+        final String HEADER_KEY = "Auth-Key";
 
-        Optional<String> token = Optional.ofNullable(request.getHeader(HEADER_KEY));
-
-        if (token.isPresent() && token.get().startsWith(PREFIX)) {
-            return Optional.of(token.get().substring(PREFIX.length()));
-        }
-
-        return Optional.empty();
+        return Optional.ofNullable(request.getHeader(HEADER_KEY));
     }
 }

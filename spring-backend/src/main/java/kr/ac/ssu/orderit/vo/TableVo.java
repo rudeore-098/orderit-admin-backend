@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Builder
 @Data
-public class JWTPayloadVo {
+public class TableVo {
+    private Integer tableSessionId;
     private Integer tableNo;
-    private Integer sessionId;
+    private Long createdAt;
+    private Integer orderTotal;
 }

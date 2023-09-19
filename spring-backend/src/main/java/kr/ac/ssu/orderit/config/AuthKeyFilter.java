@@ -10,14 +10,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.ac.ssu.orderit.entity.TableSession;
-import kr.ac.ssu.orderit.service.TableService;
-import kr.ac.ssu.orderit.service.dto.TableValidateParamDto;
-import kr.ac.ssu.orderit.service.dto.TableValidateReturnDto;
 import kr.ac.ssu.orderit.util.HTTPRequestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,12 +28,13 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JWTAuthFilter extends OncePerRequestFilter {
+public class AuthKeyFilter extends OncePerRequestFilter {
     /**
      * DI
      */
-    private final TableService tableService;
     private final HTTPRequestUtil httpRequestUtil;
+    @Value("${spring.auth.key}")
+    private String authKey;
 
     /**
      * Do filter
@@ -46,17 +44,16 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         try {
-            Optional<String> accessToken = httpRequestUtil.getAccessToken(request);
-            if (accessToken.isEmpty()) {
-                throw new Exception("No access token provided.");
+            Optional<String> authKey = httpRequestUtil.getAuthKey(request);
+            if (authKey.isEmpty()) {
+                throw new Exception("No auth key provided.");
             }
 
-            TableValidateParamDto tableValidateParamDto = TableValidateParamDto.builder()
-                    .accessToken(accessToken.get())
-                    .build();
-            TableValidateReturnDto tableValidateReturnDto = tableService.tableValidate(tableValidateParamDto);
+            if (!authKey.get().equals(this.authKey)) {
+                throw new Exception("Auth key does not match.");
+            }
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(tableValidateReturnDto.getTableSession(), "", List.of());
+            Authentication authentication = new UsernamePasswordAuthenticationToken("Admin", "", List.of());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             log.debug(e.getMessage(), e);

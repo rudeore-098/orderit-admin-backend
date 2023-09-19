@@ -60,11 +60,9 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 
             return body;
         } else {
-            return body;
-
-//            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-//            CommonResponse commonResponse = new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
-//            return (T) commonResponse;
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            CommonResponse commonResponse = new CommonResponse(statusCode.SSU5000, null, statusCode.SSU5000_MSG);
+            return (T) commonResponse;
         }
     }
 
