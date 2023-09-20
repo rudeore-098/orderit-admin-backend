@@ -11,4 +11,4 @@ RUN ./gradlew build
 
 EXPOSE 80
 
-ENTRYPOINT ["java","-jar","-Duser.timezone=Asia/Seoul","build/libs/orderit-0.0.1-SNAPSHOT.jar","-Xmx4096m"]
+ENTRYPOINT ["java","-jar","-Duser.timezone=Asia/Seoul","build/libs/orderit-0.0.1-SNAPSHOT.jar","-Xmx3072m","-Xms3072m"]
