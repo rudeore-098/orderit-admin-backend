@@ -2,6 +2,7 @@ package kr.ac.ssu.orderit.repository;
 
 import jakarta.transaction.Transactional;
 import kr.ac.ssu.orderit.entity.OrderMenu;
+import kr.ac.ssu.orderit.repository.mapping.OrderMenuMapping;
 import kr.ac.ssu.orderit.repository.mapping.TeamOrderMapping;
 import kr.ac.ssu.orderit.repository.mapping.TeamOrderMenuMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,11 @@ public interface OrderMenuRepository extends JpaRepository<OrderMenu, Integer> {
     @Modifying
     @Transactional
     void updateTeamOrdersStatus(String team, Integer orderId, Integer status);
+
+    @Query(value = "SELECT om.qty as qty, " +
+            "m.title as title, om.status as status " +
+            "FROM order_menu om " +
+            "JOIN menu m ON om.MenuId = m.id " +
+            "WHERE om.OrderId = ?1", nativeQuery = true)
+    List<OrderMenuMapping> findAllByOrderId(Integer orderId);
 }

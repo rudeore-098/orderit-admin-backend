@@ -8,6 +8,7 @@ import kr.ac.ssu.orderit.controller.dto.OrderTeamDto;
 import kr.ac.ssu.orderit.controller.dto.TableLeaveDto;
 import kr.ac.ssu.orderit.service.OrderService;
 import kr.ac.ssu.orderit.service.TableService;
+import kr.ac.ssu.orderit.vo.OrderVo;
 import kr.ac.ssu.orderit.vo.TableVo;
 import kr.ac.ssu.orderit.vo.TeamOrderVo;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,19 @@ public class OrderController {
     private final OrderService orderService;
 
     @NotNull
+    @PostMapping("")
+    @ResponseBody
+    public CommonResponse order(){
+        List<OrderVo> orderVos = orderService.getOrders();
+        return new CommonResponse(statusCode.SSU2000, orderVos, statusCode.SSU2000_MSG);
+    }
+
+
+    @NotNull
     @PostMapping("/team")
     @ResponseBody
     public CommonResponse team(@RequestBody @Valid OrderTeamDto orderTeamDto){
-        List<TeamOrderVo> teamOrderVos = orderService.getOrders(orderTeamDto.getTeam());
+        List<TeamOrderVo> teamOrderVos = orderService.getTeamOrders(orderTeamDto.getTeam());
         return new CommonResponse(statusCode.SSU2000, teamOrderVos, statusCode.SSU2000_MSG);
     }
 
