@@ -1,24 +1,17 @@
 package kr.ac.ssu.orderit.service;
 
-import kr.ac.ssu.orderit.entity.OrderMenu;
-import kr.ac.ssu.orderit.entity.TableSession;
 import kr.ac.ssu.orderit.repository.OrderMenuRepository;
 import kr.ac.ssu.orderit.repository.OrderRepository;
-import kr.ac.ssu.orderit.repository.TableSessionRepository;
 import kr.ac.ssu.orderit.repository.mapping.OrderMapping;
 import kr.ac.ssu.orderit.repository.mapping.OrderMenuMapping;
 import kr.ac.ssu.orderit.repository.mapping.TeamOrderMapping;
-import kr.ac.ssu.orderit.repository.mapping.TeamOrderMenuMapping;
 import kr.ac.ssu.orderit.vo.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,36 +50,12 @@ public class OrderService {
         return orderVos;
     }
 
-    public List<TeamOrderVo> getTeamOrders(String team){
-        ArrayList<TeamOrderVo> teamOrderVos = new ArrayList<>();
-
-        List<TeamOrderMapping> teamOrders = orderMenuRepository.findAllTeamOrderIds(team);
-        for(TeamOrderMapping teamOrder : teamOrders){
-            TeamOrderVo teamOrderVo = TeamOrderVo.builder()
-                    .orderId(teamOrder.getOrderId())
-                    .status(teamOrder.getStatus())
-                    .tableNo(teamOrder.getTableNo())
-                    .createdAt(teamOrder.getCreatedAt().getTime())
-                    .build();
-
-            ArrayList<TeamOrderMenuVo> menus = new ArrayList<>();
-            List<TeamOrderMenuMapping> orderMenus = orderMenuRepository.findAllTeamOrders(team, teamOrder.getOrderId());
-            for(TeamOrderMenuMapping orderMenu : orderMenus){
-                TeamOrderMenuVo teamOrderMenuVo = TeamOrderMenuVo.builder()
-                        .title(orderMenu.getTitle())
-                        .qty(orderMenu.getQty())
-                        .build();
-                menus.add(teamOrderMenuVo);
-            }
-
-            teamOrderVo.setMenus(menus);
-            teamOrderVos.add(teamOrderVo);
-        }
-
-        return teamOrderVos;
+    public List<TeamOrderMapping> getTeamOrders(String team){
+        List<TeamOrderMapping> teamOrders = orderMenuRepository.findAllTeamOrders(team);
+        return teamOrders;
     }
 
-    public void changeOrderStatus(String team, Integer orderId, Integer status){
-        orderMenuRepository.updateTeamOrdersStatus(team, orderId, status);
+    public void changeOrderStatus(Integer orderMenuIdx, Integer status){
+        orderMenuRepository.updateTeamOrdersStatus(orderMenuIdx, status);
     }
 }

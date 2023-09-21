@@ -7,4 +7,7 @@ public interface TeamOrderMapping {
     Integer getTableNo();
     Integer getStatus();
     Timestamp getCreatedAt();
+    String getTitle();
+    Integer getIdx();
+    Integer getQty();
 }

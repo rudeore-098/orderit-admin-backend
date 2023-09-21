@@ -8,12 +8,8 @@ import lombok.Data;
 
 @Data
 public class OrderStatusUpdateDto {
-    @NotNull(message = "team is null.")
-    @Pattern(regexp = "a|b|c")
-    private String team;
-
-    @NotNull(message = "orderId is null.")
-    private Integer orderId;
+    @NotNull(message = "orderMenuIdx is null.")
+    private Integer orderMenuIdx;
 
     @NotNull(message = "status is null.")
     @Min(value = 1)

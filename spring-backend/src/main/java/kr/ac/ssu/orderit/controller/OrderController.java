@@ -5,12 +5,9 @@ import kr.ac.ssu.orderit.common.CommonResponse;
 import kr.ac.ssu.orderit.common.StatusCode;
 import kr.ac.ssu.orderit.controller.dto.OrderStatusUpdateDto;
 import kr.ac.ssu.orderit.controller.dto.OrderTeamDto;
-import kr.ac.ssu.orderit.controller.dto.TableLeaveDto;
+import kr.ac.ssu.orderit.repository.mapping.TeamOrderMapping;
 import kr.ac.ssu.orderit.service.OrderService;
-import kr.ac.ssu.orderit.service.TableService;
 import kr.ac.ssu.orderit.vo.OrderVo;
-import kr.ac.ssu.orderit.vo.TableVo;
-import kr.ac.ssu.orderit.vo.TeamOrderVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +40,7 @@ public class OrderController {
     @PostMapping("/team")
     @ResponseBody
     public CommonResponse team(@RequestBody @Valid OrderTeamDto orderTeamDto){
-        List<TeamOrderVo> teamOrderVos = orderService.getTeamOrders(orderTeamDto.getTeam());
+        List<TeamOrderMapping> teamOrderVos = orderService.getTeamOrders(orderTeamDto.getTeam());
         return new CommonResponse(statusCode.SSU2000, teamOrderVos, statusCode.SSU2000_MSG);
     }
 
@@ -51,8 +48,7 @@ public class OrderController {
     @PostMapping("/statusUpdate")
     @ResponseBody
     public CommonResponse statusUpdate(@RequestBody @Valid OrderStatusUpdateDto orderStatusUpdateDto){
-        orderService.changeOrderStatus(orderStatusUpdateDto.getTeam(),
-                orderStatusUpdateDto.getOrderId(),
+        orderService.changeOrderStatus(orderStatusUpdateDto.getOrderMenuIdx(),
                 orderStatusUpdateDto.getStatus());
 
         return new CommonResponse(statusCode.SSU2000, null, statusCode.SSU2000_MSG);
