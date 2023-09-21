@@ -38,4 +38,7 @@ public class BankDeposit {
     @Basic
     @Column(name = "OrderId", nullable = true)
     private Integer orderId;
+    @Basic
+    @Column(name = "memo", nullable = true)
+    private String memo;
 }
